@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<title>Rankings App</title>
+		<link rel="stylesheet" href="themes/Bootstrap.css">
+		<link rel="stylesheet" href="css/jquery.mobile.structure-1.4.0.min.css" />
+		<link rel="stylesheet" href="css/style.css" />
+		<link rel="stylesheet" href="themes/jquery.mobile.icons.min.css" />
+		<script src="js/jquery-1.8.2.min.js"></script>
+		<script src="js/jquery.mobile-1.4.0.min.js"></script>
+		<script src="js/jquery-ui.min.js"></script>
+		<script src="js/jquery.ui.touch-punch.min.js"></script>
+		<script src="js/list_ranks.js" type="text/javascript" charset="utf-8"></script>	
+		<script type="text/javascript" src="js/localdb.js"></script>
+
+	</head>
+	<body>
+		<!-- Page 1-->
+		<div data-role="page" id="home" data-theme="d">
+			<div data-role="header" data-position="inline">
+				<h1 class="ui-title" tabindex="0" role="heading" aria-level="1"><img style="display:inline;" src="themes/images/logo.png"></h1>
+				<div data-role="navbar">
+					<ul>
+					<li><a href="#home" data-theme="b" data-icon="home">Home</a></li>
+					<li><a href="index.html#new" data-theme="c" rel="external" data-icon="star">New</a></li>
+					</ul>
+				</div>
+		</div>
+			<div id="list" data-role="content" data-theme="a">
+				<h2>Your Rankings</h2>			 
+			</div>
+		</div>
+		<!-- End Page 1-->
+		<!-- Page 2-->
+		<div data-role="page" id="new" data-theme="d">
+			<div data-role="header" data-position="inline">
+				<h1 class="ui-title" tabindex="0" role="heading" aria-level="1"><img style="display:inline;" src="themes/images/logo.png"></h1>
+				<div data-role="navbar">
+					<ul>
+					<li><a href="index.html"  data-theme="b" rel="external" data-icon="home">Home</a></li>
+					<li><a href="index.html#new"  data-theme="c" rel="external" data-icon="star">New</a></li>
+					</ul>
+				</div>
+			</div>
+			<div id="main" data-role="content" data-theme="a">
+				<h2>Create Ranking</h2>
+				<form>
+					<div data-role="fieldcontain">
+						<label for="name">Title*</label>
+						<input type="text" name="title" id="title" value="" />
+					</div>
+
+					<div data-role="fieldcontain">
+						<label for="textarea">Description</label>
+						<textarea cols="40" rows="10" name="description" id="desc"></textarea>
+					</div>
+					<div class="ui-body ui-body-b">
+						<fieldset class="ui-grid-a">
+						<div class="ui-block-a"><a href="#home" data-rel="back" data-role="button" data-theme="b" data-icon="arrow-l">Back</a></div>
+						<div class="ui-block-b"><a href="" id="save" data-role="button" rel="external" data-theme="c" data-icon="check">Save</a></div>
+						</fieldset>
+					</div>
+				</form>
+			</div>
+		</div>	
+		<!-- End Page 2 -->
+		<!-- Start of 3 page -->
+		<div data-role="page" id="items" data-theme="d">
+			<div data-role="header" data-position="inline">
+				<h1 class="ui-title" tabindex="0" role="heading" aria-level="1"><img style="display:inline;" src="themes/images/logo.png"></h1>
+				<div data-role="navbar">
+					<ul>
+					<li><a href="index.html"  data-theme="b" rel="external" data-icon="home">Home</a></li>
+					<li><a href="index.html#new"  data-theme="c" rel="external" data-icon="star">New</a></li>
+					</ul>
+				</div>
+			</div>
+			<div id="items_main" style="width:80%;" data-role="content" data-theme="a">		 
+			</div>
+		</div>
+		<!--end page 3 -->
+
+		<!-- Start of 3 page -->
+		<div data-role="page" id="add_competitor" data-theme="d">
+			<div data-role="header" data-position="inline">
+				<h1 class="ui-title" tabindex="0" role="heading" aria-level="1"><img style="display:inline;" src="themes/images/logo.png"></h1>
+				<div data-role="navbar">
+					<ul>
+					<li><a href="index.html"  data-theme="b" rel="external" data-icon="home">Home</a></li>
+					<li><a href="index.html#new" data-theme="c" rel="external" data-icon="star">New</a></li>
+					</ul>
+				</div>
+			</div>
+			<div id="main_add" data-role="content" class="ui-content" data-theme="a">
+				<h2>Add Competitor</h2>
+				<form>
+					<h3>Create a new competitor for the ranking</h3>
+					<div data-role="fieldcontain">
+						<label for="name">Name*</label>
+						<input type="text" name="title" id="title_competitor" value="" />
+					</div>
+					<div data-role="fieldcontain">
+						<label for="textarea">Note</label>
+						<textarea cols="40" rows="10" name="note" id="note"></textarea>
+					</div>
+					<div data-role="fieldcontain">
+						<label for="name">Vote</label>
+						<input type="text" name="title" id="vote" value="" />
+					</div>
+					<div class="ui-body ui-body-b">
+						<fieldset class="ui-grid-a">
+						<div class="ui-block-a"><a href="#items" data-rel="back" data-role="button" data-theme="b" data-icon="arrow-l">Back</a></div>
+						<div class="ui-block-b"><a href="#" id="add" data-role="button" rel="external" data-theme="c" data-icon="check">Save</a></div>
+						</fieldset>
+					</div>
+				</form>		 
+			</div>
+		</div>
+		<!--end page 3 -->
+		
+</body>
+</html>
