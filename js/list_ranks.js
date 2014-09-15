@@ -9,6 +9,7 @@ $(document).on("pageinit", this, function(e) {
 		if (!db.tableExists('rank_items')){
 			db.createTable('rank_items');
 		}
+		
 	}catch(err){
 		if(navigator.notification && navigator.notification.alert){
 			navigator.notification.alert(
