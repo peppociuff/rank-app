@@ -80,7 +80,6 @@ function addRank(){
 		//event.preventDefault();
 		var title = $('#title').val();
 		var desc = $('textarea#desc').val();
-		console.log("INSERT");
 		var id = db.insert('rank_list', {'title': title, 'description': desc});
 		window.localStorage.setItem("key", id);
 		$.mobile.changePage("#items", { transition: "flip"} );
@@ -178,7 +177,7 @@ result = db.find('rank_items',{'rank_oid': window.localStorage.getItem("key")});
 
 result.sort(order);
 if (result.length < 10){
-ris = '<a style="float:right" href="index.html#add_competitor" rel="external"  data-role="button" data-theme="d"  data-icon="plus">Add</a>'; 
+ris = '<a style="float:right" href="index.html#add_competitor"  data-role="button" data-theme="d"  data-icon="plus">Add</a>'; 
 }
 
 while (i < result.length){
