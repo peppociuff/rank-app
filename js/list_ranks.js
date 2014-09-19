@@ -40,11 +40,14 @@ $('form').find("input[type=text], textarea").val("");
 }*/	                
 });
 
-$(document).on("pageshow", this, function(e) {
+$(document).on("pagebeforeshow", this, function(e) {
 	e.preventDefault();
 	try{
 		if($.mobile.activePage.attr('id') == 'home'){
 			printList();
+			/*$( "li.rankList" ).bind( "tap", function(event){
+				alert("aiai: "+event.target);
+			});*/
 		}
 		if ($.mobile.activePage.attr('id') == 'items'){
 			printItems();
@@ -52,9 +55,45 @@ $(document).on("pageshow", this, function(e) {
 		if ($.mobile.activePage.attr('id') == 'new'){
 			$('form').find("input[type=text], textarea").val("");
 			window.localStorage.removeItem("key");
+			$('#title').on('focus', function() {
+				document.body.scrollTop = $(this).offset().top;
+			});
+			$('#desc').on('focus', function() {
+				document.body.scrollTop = $(this).offset().top;
+			});
+			$("#title").keypress(function(event) {
+				if (event.which == 13) {
+					event.preventDefault();
+					$("#save").click();
+				}
+			});
 		}
 		if ($.mobile.activePage.attr('id') == 'add_competitor'){
 			$('form').find("input[type=text], textarea").val("");
+			$('#vote').val("").selectmenu('refresh');
+			$('#title_competitor').on('focus', function() {
+				document.body.scrollTop = $(this).offset().top;
+			});
+			$('#note').on('focus', function() {
+				document.body.scrollTop = $(this).offset().top;
+			});
+			$("#title_competitor").keypress(function(event) {
+				if (event.which == 13) {
+					event.preventDefault();
+					insertItem();
+				}
+			});
+			$("#photoFromGallery").on("click", function(e) {
+				e.preventDefault();
+				$("#photoTypeSelection").popup("close");
+				getPhoto(true);
+			});    
+        
+			$("#photoFromCamera").on("click", function(e) {
+				e.preventDefault();
+				$("#photoTypeSelection").popup("close");
+				getPhoto(false);
+			});     
 		}
 	}catch(err){
 		if(navigator.notification && navigator.notification.alert){
@@ -109,7 +148,7 @@ function printList(){
 			if ((result[i].description != null) && (result[i].description != '') && (result[i].description != undefined)){
 				desc = result[i].description;
 			}
-			ris +='<ul class="ran" data-role="listview" data-inset="true" data-divider-theme="f"><li data-role="list-divider"><h1>'+result[i].title+'</h1></li><li><a class="list-rank" id="'+id+'" href="#" onclick="select_link('+id+')"><p>'+desc+'</p></a></li></ul>';					
+			ris +='<ul class="ran" data-role="listview" data-inset="true" data-divider-theme="f"><li class="rankList" data-role="list-divider"><h1>'+result[i].title+'</h1></li><li><a class="list-rank" id="'+id+'" href="#" onclick="select_link('+id+')"><p>'+desc+'</p></a></li></ul>';					
 		i++;
 		}
 		if (i == 0){
@@ -137,6 +176,7 @@ function insertItem(){
 		var name = $('#title_competitor').val();
 		var note = $('textarea#note').val();
 		var vote = $('#vote').val();
+		console.log("ciao: "+$('#vote').val());
 		var rank_oid = window.localStorage.getItem("key");
 		var position = 1;
 		var result = db.find('rank_items', {'rank_oid': rank_oid});
@@ -251,4 +291,31 @@ return 1;
 }
 return 0;
 
+}
+
+function openPopUp(){
+$("#photoTypeSelection").popup("open");
+}
+function getPhoto(fromGallery) {
+	var source = Camera.PictureSourceType.CAMERA;
+	if (fromGallery) {
+		source = Camera.PictureSourceType.PHOTOLIBRARY;  
+	}
+	navigator.camera.getPicture(
+		photoSuccess, 
+		photoError, 
+		{ 
+			quality: 30, 
+			destinationType: Camera.DestinationType.FILE_URI, 
+			sourceType: source,
+			correctOrientation: true 
+	   });  
+}
+
+function photoSuccess(newFilePath) {   
+console.log("succ: "+   newFilePath);
+}
+
+function photoError(error) {   
+console.log("error photo "+  error);
 }

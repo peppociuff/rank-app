@@ -13,6 +13,8 @@
 		<script src="js/list_ranks.js" type="text/javascript" charset="utf-8"></script>	
 		<script type="text/javascript" src="js/localdb.js"></script>
 		<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
+		<script type="text/javascript" src="phonegap.js"></script>
 	</head>
 	<body>
 		<!-- Page 1-->
@@ -105,20 +107,51 @@
 					</div>
 					<div class="ui-field-contain">
 						<label for="vote">Vote</label>
-						<input type="text" name="vote" id="vote" value="" />
+						<select name="vote" id="vote" data-theme="a">
+							<option value=""></option>
+							<option value="10">10</option>
+							<option value="9.5">9.5</option>
+							<option value="9">9</option>
+							<option value="8.5">8.5</option>
+							<option value="8">8</option>
+							<option value="7.5">7.5</option>
+							<option value="7">7</option>
+							<option value="6.5">6.5</option>
+							<option value="6">6</option>
+							<option value="5.5">5.5</option>
+							<option value="5">5</option>
+							<option value="4.5">4.5</option>
+							<option value="4">4</option>
+							<option value="3.5">3.5</option>
+							<option value="3">3</option>
+							<option value="2.5">2.5</option>
+							<option value="2">2</option>
+							<option value="1.5">1.5</option>
+							<option value="1">1</option>
+							<option value="0.5">0.5</option>
+							<option value="0">0</option>
+						</select>
 					</div>
-		
-
+					<div class="ui-field-contain">
+						<a href="#" onclick="openPopUp()" data-role="button" data-theme="b" data-corners="true" data-icon="camera" data-shadow="true">Photo</a>
+					</div>
 					<div class="ui-body ui-body-b">
 						<fieldset class="ui-grid-a">
 						<div class="ui-block-a"><a href="#items" data-rel="back" data-role="button" data-theme="b" data-icon="arrow-l">Back</a></div>
 						<div class="ui-block-b"><a href="#" onclick="insertItem()" id="add" data-role="button"   data-theme="c" data-icon="check">Save</a></div>
 						</fieldset>
 					</div>
-				</form>		 
+				</form>		
+ <div data-role="popup" id="photoTypeSelection" data-dismissible="false">
+		   <ul data-role="listview" data-inset="true" style="min-width:210px;" data-theme="a">
+			  <li data-role="divider" data-theme="a">Get Photo From</li>
+			  <li><a id="photoFromGallery" href="#">Gallery</a></li>
+			  <li><a id="photoFromCamera" href="#">Camera</a></li>
+		   </ul>
+		</div>    				
 			</div>
 		</div>
 		<!--end page 3 -->
-		
+		 
 </body>
 </html>
