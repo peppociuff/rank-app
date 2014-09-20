@@ -176,7 +176,7 @@ function insertItem(){
 		var name = $('#title_competitor').val();
 		var note = $('textarea#note').val();
 		var vote = $('#vote').val();
-		console.log("ciao: "+$('#vote').val());
+		var photo = $('imageView').attr("src");
 		var rank_oid = window.localStorage.getItem("key");
 		var position = 1;
 		var result = db.find('rank_items', {'rank_oid': rank_oid});
@@ -187,7 +187,7 @@ function insertItem(){
 
 			position= 1+ Number(result[result.length-1].position);
 		}
-		var id = db.insert('rank_items', {'name': name, 'note': note,'position': position, 'vote': vote, 'rank_oid': rank_oid});
+		var id = db.insert('rank_items', {'name': name, 'note': note,'position': position, 'vote': vote, 'image': photo, 'rank_oid': rank_oid});
 
 		$.mobile.changePage("#items", { transition: "flip"} );
 
@@ -229,6 +229,7 @@ var note = '';
 var vote = '';
 var id = result[i].ID;
 var position = result[i].position;
+var photo = result[i].image;
 if ((result[i].note != null) && (result[i].note != '') && (result[i].note != undefined)){
 note = result[i].note;
 }
@@ -236,7 +237,7 @@ note = result[i].note;
 if ((result[i].vote != null) && (result[i].vote != '') && (result[i].vote != undefined)){
 vote = '<p><h3>Vote: <b>'+result[i].vote+'</b></h3></p>';
 }
-ris +='<li id="'+id+'"><img src="themes/images/icon-'+position+'.png"/><h1>'+result[i].name+'</h1><p>'+note+'</p>'+vote+'</li>';
+ris +='<li id="'+id+'"><img src="'+photo+'"/><h1>'+result[i].name+'</h1><p>'+note+'</p>'+vote+'</li>';
 i++;
 }
 if (i == 0){
@@ -294,7 +295,7 @@ return 0;
 }
 
 function openPopUp(){
-$("#photoTypeSelection").popup("open");
+	$("#photoTypeSelection").popup("open");
 }
 function getPhoto(fromGallery) {
 	var source = Camera.PictureSourceType.CAMERA;
@@ -313,9 +314,10 @@ function getPhoto(fromGallery) {
 }
 
 function photoSuccess(newFilePath) {   
-console.log("succ: "+   newFilePath);
+	$("#imageView").show();  
+    $("#imageView").attr("src", newFilePath);
 }
 
 function photoError(error) {   
-console.log("error photo "+  error);
+	alert("error photo "+  error);
 }
