@@ -51,6 +51,13 @@ $(document).on("pagebeforeshow", this, function(e) {
 		}
 		if ($.mobile.activePage.attr('id') == 'items'){
 			printItems();
+			$("#manageCompetitor").on("click", function(e) {
+				e.preventDefault();
+				$("#manageItem").popup("close");
+				db.removeById('rank_items',window.localStorage.getItem("manage"));
+				window.localStorage.removeItem("manage");
+				printItems();
+			}); 
 		}
 		if ($.mobile.activePage.attr('id') == 'new'){
 			$('form').find("input[type=text], textarea").val("");
@@ -71,6 +78,7 @@ $(document).on("pagebeforeshow", this, function(e) {
 		if ($.mobile.activePage.attr('id') == 'add_competitor'){
 			$('form').find("input[type=text], textarea").val("");
 			$('#vote').val("").selectmenu('refresh');
+			$("#imageView").attr("src", "");
 			$('#title_competitor').on('focus', function() {
 				document.body.scrollTop = $(this).offset().top;
 			});
@@ -176,7 +184,8 @@ function insertItem(){
 		var name = $('#title_competitor').val();
 		var note = $('textarea#note').val();
 		var vote = $('#vote').val();
-		var photo = $('imageView').attr("src");
+		var photo = $('#imageView').attr("src");
+		console.log("photo: "+photo);
 		var rank_oid = window.localStorage.getItem("key");
 		var position = 1;
 		var result = db.find('rank_items', {'rank_oid': rank_oid});
@@ -237,7 +246,7 @@ note = result[i].note;
 if ((result[i].vote != null) && (result[i].vote != '') && (result[i].vote != undefined)){
 vote = '<p><h3>Vote: <b>'+result[i].vote+'</b></h3></p>';
 }
-ris +='<li id="'+id+'"><img src="'+photo+'"/><h1>'+result[i].name+'</h1><p>'+note+'</p>'+vote+'</li>';
+ris +='<li id="'+id+'" ontap="chooseItem('+id+')"><img src="'+photo+'"/><h1>'+result[i].name+'</h1><p>'+note+'</p>'+vote+'</li>';
 i++;
 }
 if (i == 0){
@@ -294,8 +303,9 @@ return 0;
 
 }
 
-function openPopUp(){
-	$("#photoTypeSelection").popup("open");
+function openPopUp(id){
+	var i = "#"+id
+	$(i).popup("open");
 }
 function getPhoto(fromGallery) {
 	var source = Camera.PictureSourceType.CAMERA;
@@ -320,4 +330,9 @@ function photoSuccess(newFilePath) {
 
 function photoError(error) {   
 	alert("error photo "+  error);
+}
+
+function chooseItem (id) {
+	window.localStorage.setItem("manage", id);
+	openPopUp("manageItem")
 }

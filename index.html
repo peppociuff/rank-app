@@ -79,6 +79,13 @@
 			</div>
 			<div id="items_main" data-role="content" data-theme="a">		 
 			</div>
+			<div data-role="popup" id="manageItem" data-dismissible="false">
+				<ul data-role="listview" data-inset="true" style="min-width:250px;" data-theme="d">
+					<li data-role="list-divider">Manage</li>
+					  <li data-theme="a"><a id="lol" href="#">Modify</a></li>
+					  <li data-theme="a"><a id="manageCompetitor" href="#">Delete</a></li>
+				</ul>
+			</div>  
 		</div>
 		<!--end page 3 -->
 
@@ -132,11 +139,11 @@
 							<option value="0">0</option>
 						</select>
 					</div>
-					<div style="width: 100%;">
+					<div style="text-align:center;">
     					<img id="imageView" style="width: 100%;"></img>
-    				</div><br/> 
+    				</div>
 					<div class="ui-field-contain">
-						<a href="#" onclick="openPopUp()" data-role="button" data-theme="b" data-corners="true" data-icon="camera" data-shadow="true">Photo</a>
+						<a href="#" onclick="openPopUp('photoTypeSelection')" data-role="button" data-theme="b" data-corners="true" data-icon="camera" data-shadow="true">Photo</a>
 					</div>
 					<div class="ui-body ui-body-b">
 						<fieldset class="ui-grid-a">
@@ -146,10 +153,10 @@
 					</div>
 				</form>		
 				<div data-role="popup" id="photoTypeSelection" data-dismissible="false">
-					<ul data-role="listview" data-inset="true" style="min-width:250px;" data-theme="a">
-						<li data-role="divider" data-theme="a">Get Photo From</li>
-						  <li><a id="photoFromGallery" href="#">Gallery</a></li>
-						  <li><a id="photoFromCamera" href="#">Camera</a></li>
+					<ul data-role="listview" data-inset="true" style="min-width:250px;" data-theme="d">
+						<li data-role="list-divider">Get Photo From</li>
+						  <li data-theme="a"><a id="photoFromGallery" href="#">Gallery</a></li>
+						  <li data-theme="a"><a id="photoFromCamera" href="#">Camera</a></li>
 					</ul>
 				</div>    				
 			</div>
