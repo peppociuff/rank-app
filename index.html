@@ -20,7 +20,7 @@
 		<!-- Page 1-->
 		<div data-role="page" id="home" data-theme="d">
 			<div data-role="header" data-position="inline">
-				<h1 class="ui-title" tabindex="0" role="heading" aria-level="1"><img style="display:inline;" src="themes/images/logo.png"/></h1>
+				<img style="margin-left: auto; margin-right: auto; display: block;" src="themes/images/logo.png"/>
 				<div data-role="navbar">
 					<ul>
 					<li><a href="#" data-theme="b" data-icon="home">Home</a></li>
@@ -28,18 +28,24 @@
 					</ul>
 				</div>
 		</div>
-			<div id="list" data-role="content" data-theme="a">
-				<h2>Your Rankings</h2>			 
+			<div id="list" style="padding-top: 70px;" data-role="content" data-theme="a">		 
 			</div>
+			<div data-role="popup" id="manageList" data-dismissible="false">
+				<ul data-role="listview" data-inset="true" style="min-width:250px;" data-theme="d">
+					<li data-role="list-divider">Manage</li>
+					  <li data-theme="a"><a id="modifyList" href="#">Modify</a></li>
+					  <li data-theme="a"><a id="deleteList" href="#">Delete</a></li>
+				</ul>
+			</div> 
 		</div>
 		<!-- End Page 1-->
 		<!-- Page 2-->
 		<div data-role="page" id="new" data-theme="d">
 			<div data-role="header" data-position="inline">
-				<h1 class="ui-title" tabindex="0" role="heading" aria-level="1"><img style="display:inline;" src="themes/images/logo.png"/></h1>
+				<img style="margin-left: auto; margin-right: auto; display: block;" src="themes/images/logo.png"/>
 				<div data-role="navbar">
 					<ul>
-					<li><a href="#home"  data-theme="b"   data-icon="home">Home</a></li>
+					<li><a href="#home" id="backHome" data-theme="b"   data-icon="home">Home</a></li>
 					<li><a href="#new"  data-theme="c"   data-icon="star">New</a></li>
 					</ul>
 				</div>
@@ -47,6 +53,7 @@
 			<div id="main" data-role="content" data-theme="a">
 				<h2>Create Ranking</h2>
 				<form action="#" method="get">
+					<input type="hidden" name="hiddenList" id="hiddenList" value="" />
 					<div data-role="fieldcontain">
 						<label for="title">Title*</label>
 						<input type="text" name="title" id="title" value="" />
@@ -58,8 +65,8 @@
 					</div>
 					<div class="ui-body ui-body-b">
 						<fieldset class="ui-grid-a">
-						<div class="ui-block-a"><a href="#home" data-rel="back" data-role="button" data-theme="b" data-icon="arrow-l">Back</a></div>
-						<div class="ui-block-b"><a href="" onclick="addRank()" id="save" data-role="button"   data-theme="c" data-icon="check">Save</a></div>
+						<div class="ui-block-a"><a href="#home" data-role="button" data-theme="b" data-icon="arrow-l">Back</a></div>
+						<div class="ui-block-b"><a href="#" id="save" data-role="button"   data-theme="c" data-icon="check">Save</a></div>
 						</fieldset>
 					</div>
 				</form>
@@ -69,7 +76,7 @@
 		<!-- Start of 3 page -->
 		<div data-role="page" id="items" data-theme="d">
 			<div data-role="header" data-position="inline">
-				<h1 class="ui-title" tabindex="0" role="heading" aria-level="1"><img style="display:inline;" src="themes/images/logo.png"/></h1>
+				<img style="margin-left: auto; margin-right: auto; display: block;" src="themes/images/logo.png"/>
 				<div data-role="navbar">
 					<ul>
 					<li><a href="#home"  data-theme="b"   data-icon="home">Home</a></li>
@@ -82,8 +89,8 @@
 			<div data-role="popup" id="manageItem" data-dismissible="false">
 				<ul data-role="listview" data-inset="true" style="min-width:250px;" data-theme="d">
 					<li data-role="list-divider">Manage</li>
-					  <li data-theme="a"><a id="lol" href="#">Modify</a></li>
-					  <li data-theme="a"><a id="manageCompetitor" href="#">Delete</a></li>
+					  <li data-theme="a"><a id="modifyCompetitor" href="#">Modify</a></li>
+					  <li data-theme="a"><a id="deleteCompetitor" href="#">Delete</a></li>
 				</ul>
 			</div>  
 		</div>
@@ -92,7 +99,7 @@
 		<!-- Start of 3 page -->
 		<div data-role="page" id="add_competitor" data-theme="d">
 			<div data-role="header" data-position="inline">
-				<h1 class="ui-title" tabindex="0" role="heading" aria-level="1"><img style="display:inline;" src="themes/images/logo.png"/></h1>
+				<img style="margin-left: auto; margin-right: auto; display: block;" src="themes/images/logo.png"/>
 				<div data-role="navbar">
 					<ul>
 					<li><a href="#home"  data-theme="b"   data-icon="home">Home</a></li>
@@ -103,6 +110,7 @@
 			<div id="main_add" data-role="content" class="ui-content" data-theme="a">
 				<h2>Add Competitor</h2>
 				<form action="#" method="get">
+				<input type="hidden" style="" name="hiddenOid" id="hiddenOid" value="" />
 				<h3>Create a new competitor for the ranking</h3>
 					<div class="ui-field-contain">
 						<label for="competitor">Name*</label>
@@ -147,7 +155,7 @@
 					</div>
 					<div class="ui-body ui-body-b">
 						<fieldset class="ui-grid-a">
-						<div class="ui-block-a"><a href="#items" data-rel="back" data-role="button" data-theme="b" data-icon="arrow-l">Back</a></div>
+						<div class="ui-block-a"><a href="#items"  data-role="button" data-theme="b" data-icon="arrow-l">Back</a></div>
 						<div class="ui-block-b"><a href="#" onclick="insertItem()" id="add" data-role="button"   data-theme="c" data-icon="check">Save</a></div>
 						</fieldset>
 					</div>
@@ -162,6 +170,5 @@
 			</div>
 		</div>
 		<!--end page 3 -->
-		 
 </body>
 </html>

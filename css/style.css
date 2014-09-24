@@ -1,17 +1,14 @@
-#pos1 {
-	background:url(/app/themes/images/icon-0.png) no-repeat top left;
-	width:80px;
-	height:80px;
+.description {
+	color:#333;
+	overflow:show;
+	text-overflow:clip;
+	white-space:normal;
+	height:28px;
+	margin-bottom:0px;
 }
 
-#pos2 {
-	background:url(/app/themes/images/icon-1.png) no-repeat top left;
-	width:80px;
-	height:80px;
-}
-
-#pos3 {
-	background:url(/app/themes/images/icon-2.png) no-repeat top left;
-	width:80px;
-	height:80px;
+.ran li a h1 {
+    color:#51A351;
+	font-size: 20px;
+	font-weight:bold;
 }

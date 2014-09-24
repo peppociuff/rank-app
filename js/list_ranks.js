@@ -1,338 +1,390 @@
 var db;
 $(document).on("pageinit", this, function(e) {
-	try{
-		e.preventDefault();
-		db = new localdb('Rankings');
-		if (!db.tableExists('rank_list')){
-			db.createTable('rank_list');
-		}
-		if (!db.tableExists('rank_items')){
-			db.createTable('rank_items');
-		}
-		
-	}catch(err){
-		if(navigator.notification && navigator.notification.alert){
-			navigator.notification.alert(
-			'No no ma che fai leopiti!?',
-			function(){},
-			'Error'
-		);
-		}else{
-			console.log("Error");
-		}
-	}	
-
- 
- 
-/*var page_id = $.mobile.activePage.attr('id');
-if (page_id == 'home'){
-printList();
-}
-if (page_id == 'items'){
-printItems();
-}
-if (page_id == 'new'){
-$('form').find("input[type=text], textarea").val("");
-window.localStorage.removeItem("key");
-}
-if (page_id == 'add_competitor'){
-$('form').find("input[type=text], textarea").val("");
-}*/	                
+        e.preventDefault();
+        db = new localdb('Rankings');
+        if (!db.tableExists('rank_list')) {
+            db.createTable('rank_list');
+        }
+        if (!db.tableExists('rank_items')) {
+            db.createTable('rank_items');
+        }
+	$.mobile.pushStateEnabled = false;
+	$.mobile.defaultPageTransition = 'none'; 
 });
 
-$(document).on("pagebeforeshow", this, function(e) {
-	e.preventDefault();
-	try{
-		if($.mobile.activePage.attr('id') == 'home'){
+$(document).on("pagebeforeshow", "#home", function() {
+	printList();
+	
+	$(document).on('taphold', '.ran li',function(e) {
+		if (e.handled !== true) {
+			e.handled = true;
+			chooseItem(this.id,'list');
+		}
+	});
+	
+	$(document).one('click', '#modifyList',function(e) {
+		if (e.handled !== true) {
+			$("#manageList").popup("close");
+			e.handled = true;
+            $.mobile.changePage("#new");	
+		}
+	});
+		   
+	$(document).one('click', '#deleteList',function(e) {
+		if (e.handled !== true) {
+			$("#manageList").popup("close");
+			var removeId = window.localStorage.getItem("manage");
+			db.removeById('rank_list', removeId);
+			db.remove('rank_items', {'rank_oid': removeId});
+			window.localStorage.removeItem("manage");
+			$('.ran li#'+removeId).remove();
+			$("#manageList").popup("close");
+			e.handled = true;
 			printList();
-			/*$( "li.rankList" ).bind( "tap", function(event){
-				alert("aiai: "+event.target);
-			});*/
 		}
-		if ($.mobile.activePage.attr('id') == 'items'){
-			printItems();
-			$("#manageCompetitor").on("click", function(e) {
-				e.preventDefault();
-				$("#manageItem").popup("close");
-				db.removeById('rank_items',window.localStorage.getItem("manage"));
-				window.localStorage.removeItem("manage");
-				printItems();
-			}); 
+	}); 			
+});
+$(document).on("pagebeforeshow", "#items", function() {
+	printItems();
+	
+	$(document).one('click', '#deleteCompetitor',function(e) {
+		if (e.handled !== true) {
+			var removeId = window.localStorage.getItem("manage");
+			db.removeById('rank_items', removeId);
+			window.localStorage.removeItem("manage");
+			$('li#'+removeId).remove();
+			$("#manageItem").popup("close");
+			e.handled = true;
+			updateItems();
 		}
-		if ($.mobile.activePage.attr('id') == 'new'){
-			$('form').find("input[type=text], textarea").val("");
-			window.localStorage.removeItem("key");
-			$('#title').on('focus', function() {
-				document.body.scrollTop = $(this).offset().top;
-			});
-			$('#desc').on('focus', function() {
-				document.body.scrollTop = $(this).offset().top;
-			});
-			$("#title").keypress(function(event) {
-				if (event.which == 13) {
-					event.preventDefault();
-					$("#save").click();
-				}
-			});
+	});
+	
+	$(document).one('click', '#modifyCompetitor',function(e) {
+		if (e.handled !== true) {
+			$("#manageItem").popup("close");
+			$.mobile.changePage("#add_competitor");
+			e.handled = true;
 		}
-		if ($.mobile.activePage.attr('id') == 'add_competitor'){
-			$('form').find("input[type=text], textarea").val("");
-			$('#vote').val("").selectmenu('refresh');
-			$("#imageView").attr("src", "");
-			$('#title_competitor').on('focus', function() {
-				document.body.scrollTop = $(this).offset().top;
-			});
-			$('#note').on('focus', function() {
-				document.body.scrollTop = $(this).offset().top;
-			});
-			$("#title_competitor").keypress(function(event) {
-				if (event.which == 13) {
-					event.preventDefault();
-					insertItem();
-				}
-			});
-			$("#photoFromGallery").on("click", function(e) {
-				e.preventDefault();
-				$("#photoTypeSelection").popup("close");
-				getPhoto(true);
-			});    
-        
-			$("#photoFromCamera").on("click", function(e) {
-				e.preventDefault();
-				$("#photoTypeSelection").popup("close");
-				getPhoto(false);
-			});     
+	});
+	
+	$(document).on('taphold', '#sortable li',function(e) {
+		if (e.handled !== true) {
+			e.handled = true;
+			chooseItem(this.id,'item');
 		}
-	}catch(err){
-		if(navigator.notification && navigator.notification.alert){
-			navigator.notification.alert(
-			'No no c eravamo quasi forse',
-			function(){},
-			'Error'
-		);
-		}else{
-			console.log("Error");
+	});
+});
+		
+$(document).on("pagebeforeshow", "#new", function() {
+	if (window.localStorage.getItem("manage") != undefined){
+		var id = window.localStorage.getItem("manage");
+		window.localStorage.removeItem("manage");
+		var result = db.findById('rank_list', id);
+		 $('#title').val(result.title);
+		 $('#desc').val(result.description);
+		 $('#hiddenList').val(id);
+	}else{
+		$('form').find("input[type=text], textarea, hidden").val("");
+	}
+	window.localStorage.removeItem("key");
+	$('#title').on('focus', function() {
+		document.body.scrollTop = $(this).offset().top;
+	});
+	$('#desc').on('focus', function() {
+		document.body.scrollTop = $(this).offset().top;
+	});
+	$("#title").keypress(function(event) {
+		if (event.which == 13) {
+			event.preventDefault();
+			$("#save").click();
 		}
+	});
+	$(document).one('click', '#save',function(e) {
+		if (e.handled !== true) {
+			e.handled = true;
+			addRank();
+		}
+	}); 			
+	
+});
+
+$(document).on("pagebeforeshow", "#add_competitor", function() {
+	if (window.localStorage.getItem("manage") != undefined){
+		var id = window.localStorage.getItem("manage");
+		window.localStorage.removeItem("manage");
+		var result = db.findById('rank_items', id);
+		if (result != undefined){
+			$('#vote').val(result.vote).selectmenu('refresh');
+			$('#title_competitor').val(result.name);
+			$('#note').val(result.note);
+			$('#imageView').attr("src", result.image);
+			$('#hiddenOid').val(id);
+		}
+	
+	}else{
+		$('form').find("input[type=text], textarea, hidden").val("");
+		$('#vote').val("").selectmenu('refresh');
+		$("#imageView").attr("src", "");
 	}
 	
+	$('#title_competitor').on('focus', function() {
+		document.body.scrollTop = $(this).offset().top;
+	});
+	
+	$('#note').on('focus', function() {
+		document.body.scrollTop = $(this).offset().top;
+	});
+	
+	$("#title_competitor").keypress(function(event) {
+		if (event.which == 13) {
+			event.preventDefault();
+			insertItem();
+		}
+	});
+	
+	$("#photoFromGallery").on("click", function(e) {
+		e.preventDefault();
+		$("#photoTypeSelection").popup("close");
+		getPhoto(true);
+	});
 
+	$("#photoFromCamera").on("click", function(e) {
+		e.preventDefault();
+		$("#photoTypeSelection").popup("close");
+		getPhoto(false);
+	});
 });
-/*
-document.addEventListener("DOMContentLoaded", function() {
-//event.preventDefault();
-$('#save').click(addRank); 
-$('#add').click(insertItem);
-},false);*/
-function addRank(){
-	try{
-		//event.preventDefault();
-		var title = $('#title').val();
-		var desc = $('textarea#desc').val();
-		var id = db.insert('rank_list', {'title': title, 'description': desc});
+
+
+
+
+function addRank() {
+	var oid = $('#hiddenList').val();
+	var title = $('#title').val();
+	var desc = $('textarea#desc').val();
+	if (oid != ""){
+		db.updateById('rank_list', {
+			'title': title,
+			'description':desc,
+		}, oid);
+		$('#hiddenList').val("");
+		window.localStorage.removeItem("key");
+		$.mobile.changePage("#home");
+	}else{
+		var id = db.insert('rank_list', {
+			'title': title,
+			'description': desc
+		});
 		window.localStorage.setItem("key", id);
-		$.mobile.changePage("#items", { transition: "flip"} );
-	}catch(err){
-		if(navigator.notification && navigator.notification.alert){
-			navigator.notification.alert(
-			'No no...vai via vai via',
-			function(){},
-			'Error'
-		);
-		}else{
-			console.log("Error");
-		}
+		$.mobile.changePage("#items");
 	}
+	return;
 }
 
-function printList(){
-	try{
-		$("#list").empty();
-		var result = db.find('rank_list');
-		var ris = '<h2>Your Rankings</h2>'; 
-		var i = 0;
-		while (i < result.length){
-			var desc = '';
-			var id = result[i].ID;
-			if ((result[i].description != null) && (result[i].description != '') && (result[i].description != undefined)){
-				desc = result[i].description;
-			}
-			ris +='<ul class="ran" data-role="listview" data-inset="true" data-divider-theme="f"><li class="rankList" data-role="list-divider"><h1>'+result[i].title+'</h1></li><li><a class="list-rank" id="'+id+'" href="#" onclick="select_link('+id+')"><p>'+desc+'</p></a></li></ul>';					
+function printList() {
+	$("#list").empty();
+	var result = db.find('rank_list');
+	var resultPhoto = db.find('rank_items', {'position': '1'});
+	var ris = '';
+	var i = 0;
+	var photo = new Array();
+	while (i < resultPhoto.length) {
+		photo[resultPhoto[i].rank_oid] = resultPhoto[i].image;
+	i++
+	}
+	i = 0;
+	while (i < result.length) {
+		if (i == 0) {
+			ris += '<ul style="width:95%; margin-left: auto; margin-right: auto;" class="ran" data-inset="true" data-role="listview"><li data-role="list-divider" data-theme="f"><h2>Your Rankings</h2></li>';
+		}
+		var desc = '';
+		var id = result[i].ID;
+		if ((result[i].description != null) && (result[i].description != '') && (result[i].description != undefined)) {
+			desc = result[i].description;
+		}
+		var img = "";
+		if ((photo[id] != null) && (photo[i] != '') && (photo[i] != undefined)) {
+			img = photo[id]
+		}
+		ris += '<li id="'+id+'"><a href="#" onclick="select_link(' + id + ')"><h1>' + result[i].title + '</h1><img src="'+img+'"/><p class="description">' + desc + '</p></a></li>';
 		i++;
-		}
-		if (i == 0){
-			ris +='<h3>You do not have added any ranking yet</p>';
-		}
-		$('#list').append(ris);		
-		$('.ran').listview().listview("refresh");	
-	}catch(err){
-		if(navigator.notification && navigator.notification.alert){
-			navigator.notification.alert(
-			'No no...vai via vai via',
-			function(){},
-			'Error'
-		);
-		}else{
-			console.log("Error");
-		}
 	}
+	if (i == 0) {
+		ris += '<h3>You do not have added any ranking yet</p>';
+	}else{
+		ris += '</ul>';
+	}
+	$('#list').append(ris);
+	$('.ran').listview().listview("refresh");
+	return;
 }
 
 
-function insertItem(){
-	console.log("ITEM");
-	try{
-		var name = $('#title_competitor').val();
-		var note = $('textarea#note').val();
-		var vote = $('#vote').val();
-		var photo = $('#imageView').attr("src");
-		console.log("photo: "+photo);
-		var rank_oid = window.localStorage.getItem("key");
-		var position = 1;
-		var result = db.find('rank_items', {'rank_oid': rank_oid});
+function insertItem() {
+	var oid = $('#hiddenOid').val();
+	var name = $('#title_competitor').val();
+	var note = $('textarea#note').val();
+	var vote = $('#vote').val();
+	var photo = $('#imageView').attr("src");
+	var rank_oid = window.localStorage.getItem("key");
+	var position = 1;
+	
+	if (oid != ""){
+		db.updateById('rank_items', {
+			'name': name,
+			'vote':vote,
+			'note':note,
+			'photo':photo,
+		}, oid);
+		$('#hiddenOid').val("");
+	}else{
+		var result = db.find('rank_items', {
+			'rank_oid': rank_oid
+		});
 
-		if (result != ''){
-
+		if (result != '') {
 			result.sort(order);
-
-			position= 1+ Number(result[result.length-1].position);
+			position = 1 + Number(result[result.length - 1].position);
 		}
-		var id = db.insert('rank_items', {'name': name, 'note': note,'position': position, 'vote': vote, 'image': photo, 'rank_oid': rank_oid});
-
-		$.mobile.changePage("#items", { transition: "flip"} );
-
-	}catch(err){
-		if(navigator.notification && navigator.notification.alert){
-			navigator.notification.alert(
-			'No no...che pizza',
-			function(){},
-			'Error'
-		);
-		}else{
-			console.log("Error");
-		}
+		var id = db.insert('rank_items', {
+			'name': name,
+			'note': note,
+			'position': position,
+			'vote': vote,
+			'image': photo,
+			'rank_oid': rank_oid
+		});
 	}
+	$.mobile.changePage("#items");
+
+return;
 }
 
 
 
-function printItems(){
-//event.preventDefault();
-try{
-var result = null;
-var ris = '';
-var i = 0;
+function printItems() {
+	var result = null;
+	var ris = '';
+	var i = 0;
 
+	result = db.find('rank_items', {
+		'rank_oid': window.localStorage.getItem("key")
+	});
 
-result = db.find('rank_items',{'rank_oid': window.localStorage.getItem("key")});
-
-result.sort(order);
-if (result.length < 10){
-ris = '<a style="float:right" href="index.html#add_competitor"  data-role="button" data-theme="d"  data-icon="plus">Add</a>'; 
-}
-
-while (i < result.length){
-if (i == 0){
-ris +='<div style="width:80%;"><ul style="clear:both" data-role="listview" data-inset="true" data-theme="d" id="sortable"><li data-role="list-divider">Official Ranking</li>';
-}
-var note = '';
-var vote = '';
-var id = result[i].ID;
-var position = result[i].position;
-var photo = result[i].image;
-if ((result[i].note != null) && (result[i].note != '') && (result[i].note != undefined)){
-note = result[i].note;
-}
-
-if ((result[i].vote != null) && (result[i].vote != '') && (result[i].vote != undefined)){
-vote = '<p><h3>Vote: <b>'+result[i].vote+'</b></h3></p>';
-}
-ris +='<li id="'+id+'" ontap="chooseItem('+id+')"><img src="'+photo+'"/><h1>'+result[i].name+'</h1><p>'+note+'</p>'+vote+'</li>';
-i++;
-}
-if (i == 0){
-ris+='<h3>This ranking is empty</h3>';
-}else{
-ris +='</ul></div>';
-}
-
-
-$('#items_main').html(ris);		
-$('#sortable').listview().listview("refresh");
-$('#items_main').trigger('create');
-$( "#sortable" ).sortable();
-$( "#sortable" ).disableSelection();
-
-$( "#sortable" ).bind( "sortstop", function(event, ui) {
-$("#sortable li").each(function(index) {   
-if (index != 0){
-var  $current = $(this);
-db.updateById('rank_items', {'position': index}, $current.attr("id"));
-}		
-
-});
-printItems();
-
-});
-}catch(err){
-		if(navigator.notification && navigator.notification.alert){
-			navigator.notification.alert(
-			'dai quasi quasi',
-			function(){},
-			'Error'
-		);
-		}else{
-			console.log("Error");
-		}
+	result.sort(order);
+	if (result.length < 10) {
+		ris = '<a style="float:right" href="#add_competitor"  data-role="button" data-theme="d"  data-icon="plus">Add</a>';
 	}
-}	
 
-function select_link(id){
-window.localStorage.setItem("key", id);
-$.mobile.changePage("#items", { transition: "flip"} );
+	while (i < result.length) {
+		if (i == 0) {
+			ris += '<div style="width:80%;"><ul style="clear:both" data-role="listview" data-inset="true" data-theme="d" id="sortable"><li id="divider" data-role="list-divider" role="heading">Official Ranking</li>';
+		}
+		var note = '';
+		var vote = '';
+		var id = result[i].ID;
+		var position = result[i].position;
+		var photo = result[i].image;
+		if ((result[i].note != null) && (result[i].note != '') && (result[i].note != undefined)) {
+			note = result[i].note;
+		}
+
+		if ((result[i].vote != null) && (result[i].vote != '') && (result[i].vote != undefined)) {
+			vote = '<p><h3>Vote: <b>' + result[i].vote + '</b></h3></p>';
+		}
+		if ((photo != null) && (photo != '') && (photo != undefined)) {
+			photo = '<img style="width:80px;height:80px;" src="' + photo + '"/>';
+		} else {
+			photo = '<img src=""/>';
+		}
+		ris += '<li id="' + id + '">' + photo + '<h1><img src="themes/images/icon-' + position + '.png"/>' + result[i].name + '</h1><p>' + note + '</p>' + vote + '</li>';
+		i++;
+	}
+	if (i == 0) {
+		ris += '<h3>This ranking is empty</h3>';
+	} else {
+		ris += '</ul></div>';
+	}
+
+	$('#items_main').html(ris);
+	$('#sortable').listview().listview("refresh");
+	$('#items_main').trigger('create');
+	$("#sortable").sortable({items: '> li:not(#divider)'});
+	$("#sortable").disableSelection();
+
+	$("#sortable").bind("sortstop", function(event, ui) {
+		event.preventDefault();
+		updateItems();
+	});
+return;
+}
+
+function updateItems() {
+	$("#sortable li").each(function(index) {
+		if (index != 0) {
+			var $current = $(this);
+			console.log("ID: "+$current.attr("id")+ " POS: "+index);
+			db.updateById('rank_items', {
+				'position': index
+			}, $current.attr("id"));
+		}
+
+	});
+	printItems();
+}
+function select_link(id) {
+    window.localStorage.setItem("key", id);
+    $.mobile.changePage("#items");
 };
 
-function order(a,b){
+function order(a, b) {
+    if (a.position < b.position) {
+        return -1;
+    }
+    if (a.position > b.position) {
+        return 1;
+    }
+    return 0;
 
-if (a.position < b.position){
-return -1;
-}
-if (a.position > b.position){
-return 1;
-}
-return 0;
-
 }
 
-function openPopUp(id){
-	var i = "#"+id
-	$(i).popup("open");
+function openPopUp(id) {
+    var i = "#" + id;
+    $(i).popup("open");
 }
+
 function getPhoto(fromGallery) {
-	var source = Camera.PictureSourceType.CAMERA;
-	if (fromGallery) {
-		source = Camera.PictureSourceType.PHOTOLIBRARY;  
-	}
-	navigator.camera.getPicture(
-		photoSuccess, 
-		photoError, 
-		{ 
-			quality: 30, 
-			destinationType: Camera.DestinationType.FILE_URI, 
-			sourceType: source,
-			correctOrientation: true 
-	   });  
+    var source = Camera.PictureSourceType.CAMERA;
+    if (fromGallery) {
+        source = Camera.PictureSourceType.PHOTOLIBRARY;
+    }
+    navigator.camera.getPicture(
+        photoSuccess,
+        photoError, {
+            quality: 30,
+            destinationType: Camera.DestinationType.FILE_URI,
+            sourceType: source,
+            correctOrientation: true
+        });
 }
 
-function photoSuccess(newFilePath) {   
-	$("#imageView").show();  
+function photoSuccess(newFilePath) {
+    $("#imageView").show();
     $("#imageView").attr("src", newFilePath);
 }
 
-function photoError(error) {   
-	alert("error photo "+  error);
+function photoError(error) {
+    alert("error photo " + error);
 }
 
-function chooseItem (id) {
+function chooseItem(id, page) {
 	window.localStorage.setItem("manage", id);
-	openPopUp("manageItem")
+	if (page == 'item'){
+		openPopUp("manageItem")
+	}else{
+		openPopUp("manageList")
+	}
 }
+
+
+ 
