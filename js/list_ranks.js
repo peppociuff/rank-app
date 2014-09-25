@@ -218,7 +218,7 @@ function printList() {
 	var i = 0;
 	var photo = new Array();
 	while (i < resultPhoto.length) {
-		photo[resultPhoto[i].rank_oid] = resultPhoto[i].image;
+		photo[resultPhoto[i].rank_oid] = resultPhoto[i].name;
 	i++
 	}
 	i = 0;
@@ -232,14 +232,14 @@ function printList() {
 			desc = result[i].description;
 		}
 		var img = "";
-		if ((photo[id] != null) && (photo[i] != '') && (photo[i] != undefined)) {
+		if ((photo[id] != null) && (photo[id] != '') && (photo[id] != undefined)) {
 			img = photo[id]
 		}
 		ris += '<li  id="'+id+'"><a href="#" onclick="select_link(' + id + ')"><img src="'+img+'"/><h3>' + result[i].title + '</h1><p class="">' + desc + '</p></a></li>';
 		i++;
 	}
 	if (i == 0) {
-		ris += '<h3>You do not have added any ranking yet</p>';
+		ris += '<h3>You do not have added any ranking yet</h3>';
 	}else{
 		ris += '</ul>';
 	}
@@ -400,7 +400,6 @@ function getPhoto(fromGallery) {
 }
 
 function photoSuccess(newFilePath) {
-	alert("Evviva");
     $("#imageView").show();  
     $("#imageView").attr("src", newFilePath);
 }

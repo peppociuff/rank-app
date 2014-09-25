@@ -16,4 +16,10 @@ label.error {
 background-color: #FFFFFF;
 border-style: none; 
 }
- 
+.ran li h3{
+	text-transform: capitalize;
+}
+
+.minHeight h1{
+	text-transform: capitalize;
+}
