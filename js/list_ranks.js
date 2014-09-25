@@ -218,7 +218,7 @@ function printList() {
 	var i = 0;
 	var photo = new Array();
 	while (i < resultPhoto.length) {
-		photo[resultPhoto[i].rank_oid] = resultPhoto[i].name;
+		photo[resultPhoto[i].rank_oid] = resultPhoto[i].image;
 	i++
 	}
 	i = 0;
@@ -226,7 +226,7 @@ function printList() {
 		if (i == 0) {
 			ris += '<ul style="width:95%; margin-left: auto; margin-right: auto;" class="ran" data-inset="true"  data-role="listview"><li role="heading" data-role="list-divider"  data-theme="f">Your Rankings</li>';
 		}
-		var desc = '';
+		var desc = "";
 		var id = result[i].ID;
 		if ((result[i].description != null) && (result[i].description != '') && (result[i].description != undefined)) {
 			desc = result[i].description;
@@ -235,6 +235,7 @@ function printList() {
 		if ((photo[id] != null) && (photo[id] != '') && (photo[id] != undefined)) {
 			img = photo[id]
 		}
+		
 		ris += '<li  id="'+id+'"><a href="#" onclick="select_link(' + id + ')"><img src="'+img+'"/><h3>' + result[i].title + '</h1><p class="">' + desc + '</p></a></li>';
 		i++;
 	}
@@ -263,7 +264,7 @@ function insertItem() {
 			'name': name,
 			'vote':vote,
 			'note':note,
-			'photo':photo,
+			'image':photo,
 		}, oid);
 		$('#hiddenOid').val("");
 	}else{
@@ -322,7 +323,7 @@ function printItems() {
 			vote = '<p><h3>Vote: <b>' + result[i].vote + '</b></h3></p>';
 		}
 		if ((photo != null) && (photo != '') && (photo != undefined)) {
-			photo = '<img style="width:80px;height:80px;" src="' + photo + '"/>';
+			photo = '<img style="width:80px; height:80px;" src="' + photo + '"/>';
 		} else {
 			photo = '<img src=""/>';
 		}
