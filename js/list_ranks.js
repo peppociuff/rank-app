@@ -100,10 +100,12 @@ $(document).on("pagebeforeshow", "#new", function() {
 	$('#desc').on('focus', function() {
 		document.body.scrollTop = $(this).offset().top;
 	});
-	$("#title").keypress(function(event) {
-		if ((event.which == 13) && ($("#newForm").valid())) {
-			event.preventDefault();
-			$("#save").click();
+	$(document).on('keypress', '#title', function(e) {
+		if (e.which == 13){
+			if ((e.handled !== true) && ($("#newForm").valid()) && (e.which == 13)) {
+				e.handled = true;
+				$("#save").click();
+			}
 		}
 	});
 	$(document).on('click', '#save',function(e) {
@@ -148,10 +150,12 @@ $(document).on("pagebeforeshow", "#add_competitor", function() {
 		document.body.scrollTop = $(this).offset().top;
 	});
 	
-	$("#title_competitor").keypress(function(event) {
-		if ((event.which == 13) && ($("#newItem").valid())) {
-			event.preventDefault();
-			insertItem();
+	$(document).on('keypress', '#title_competitor', function(e) {
+		if (e.which == 13){
+			if ((e.handled !== true) && ($("#newItem").valid()) && (e.which == 13)) {
+				e.handled = true;
+				insertItem();
+			}
 		}
 	});
 	$(document).on('click', '#addItem',function(e) {
@@ -231,12 +235,12 @@ function printList() {
 		if ((result[i].description != null) && (result[i].description != '') && (result[i].description != undefined)) {
 			desc = result[i].description;
 		}
-		var img = "";
+		var img = '<img src=""/>';
 		if ((photo[id] != null) && (photo[id] != '') && (photo[id] != undefined)) {
-			img = photo[id]
+			img = '<img style="" src="'+photo[id]+'"/>';
 		}
 		
-		ris += '<li  id="'+id+'"><a href="#" onclick="select_link(' + id + ')"><img src="'+img+'"/><h3>' + result[i].title + '</h1><p class="">' + desc + '</p></a></li>';
+		ris += '<li class="minHeight" id="'+id+'"><a href="#" onclick="select_link(' + id + ')">'+img+'<h3>' + result[i].title + '</h3><p>' + desc + '</p></a></li>';
 		i++;
 	}
 	if (i == 0) {
@@ -308,7 +312,7 @@ function printItems() {
 
 	while (i < result.length) {
 		if (i == 0) {
-			ris += '<div style="width:80%;"><ul style="clear:both" data-role="listview" data-inset="true" data-theme="d" id="sortable"><li id="divider" data-theme="f" data-role="list-divider" role="heading">Official Ranking</li>';
+			ris += '<div style="width:80%;"><ul style="clear:both" data-role="listview" data-inset="true"  id="sortable"><li id="divider" data-theme="f" data-role="list-divider" role="heading">Official Ranking</li>';
 		}
 		var note = '';
 		var vote = '';
@@ -320,14 +324,14 @@ function printItems() {
 		}
 
 		if ((result[i].vote != null) && (result[i].vote != '') && (result[i].vote != undefined)) {
-			vote = '<p><h3>Vote: <b>' + result[i].vote + '</b></h3></p>';
+			vote = '<p><h4 style="color:orange;">Vote: <b>' + result[i].vote + '</b></h4></p>';
 		}
 		if ((photo != null) && (photo != '') && (photo != undefined)) {
-			photo = '<img style="width:80px; height:80px;" src="' + photo + '"/>';
+			photo = '<img style="" src="' + photo + '"/>';
 		} else {
-			photo = '<img src=""/>';
+			photo = '<img src="themes/images/null.png"/>';
 		}
-		ris += '<li class="minHeight" id="' + id + '">' + photo + '<h1><img src="themes/images/icon-' + position + '.png"/>' + result[i].name + '</h1><p>' + note + '</p>' + vote + '</li>';
+		ris += '<li class="minHeight" id="' + id + '"><a href="#">' + photo + '<h3><img src="themes/images/icon-' + position + '.png"/>&nbsp;'+ result[i].name + '</h3><p>' + note + '</p>' + vote + '</li>';
 		i++;
 	}
 	if (i == 0) {

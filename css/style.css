@@ -1,7 +1,5 @@
- 
-
 .minHeight {
-  height:100px; 
+  height: 20%;
 }
 label { display: block; }
  
@@ -13,13 +11,21 @@ label.error {
     color: red;
 }
 .ui-body-b{
-background-color: #FFFFFF;
-border-style: none; 
+	background-color: #FFFFFF;
+	border-style: none; 
 }
 .ran li h3{
 	text-transform: capitalize;
+	font-size: 20px;
+	color: green;
 }
 
-.minHeight h1{
+.minHeight h3{
 	text-transform: capitalize;
+	font-size: 20px;
+	color: green;
 }
+
+img {
+    vertical-align: middle;
+} 
