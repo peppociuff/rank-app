@@ -22,7 +22,7 @@ $(document).on("pagebeforeshow", "#home", function() {
 		}
 	});
 	
-	$(document).one('click', '#modifyList',function(e) {
+	$(document).on('click', '#modifyList',function(e) {
 		if (e.handled !== true) {
 			$("#manageList").popup("close");
 			e.handled = true;
@@ -30,7 +30,7 @@ $(document).on("pagebeforeshow", "#home", function() {
 		}
 	});
 		   
-	$(document).one('click', '#deleteList',function(e) {
+	$(document).on('click', '#deleteList',function(e) {
 		if (e.handled !== true) {
 			$("#manageList").popup("close");
 			var removeId = window.localStorage.getItem("manage");
@@ -42,12 +42,19 @@ $(document).on("pagebeforeshow", "#home", function() {
 			e.handled = true;
 			printList();
 		}
-	}); 			
+	}); 	
+	$(document).on('click', '#about',function(e) {
+		if (e.handled !== true) {
+		console.log("about");
+			e.handled = true;
+			openPopUp("info");
+		}
+	});	
 });
 $(document).on("pagebeforeshow", "#items", function() {
 	printItems();
 	
-	$(document).one('click', '#deleteCompetitor',function(e) {
+	$(document).on('click', '#deleteCompetitor',function(e) {
 		if (e.handled !== true) {
 			var removeId = window.localStorage.getItem("manage");
 			db.removeById('rank_items', removeId);
@@ -59,7 +66,7 @@ $(document).on("pagebeforeshow", "#items", function() {
 		}
 	});
 	
-	$(document).one('click', '#modifyCompetitor',function(e) {
+	$(document).on('click', '#modifyCompetitor',function(e) {
 		if (e.handled !== true) {
 			$("#manageItem").popup("close");
 			$.mobile.changePage("#add_competitor");
@@ -99,12 +106,18 @@ $(document).on("pagebeforeshow", "#new", function() {
 			$("#save").click();
 		}
 	});
-	$(document).one('click', '#save',function(e) {
-		if (e.handled !== true) {
+	$(document).on('click', '#save',function(e) {
+		if ((e.handled !== true) && ($("#newForm").valid())) {
 			e.handled = true;
 			addRank();
 		}
-	}); 			
+	}); 	
+	$( "#newForm" ).validate({
+		messages: {
+			title: "Title is required.",
+		},
+		focusInvalid: false
+	});
 	
 });
 
@@ -141,6 +154,12 @@ $(document).on("pagebeforeshow", "#add_competitor", function() {
 			insertItem();
 		}
 	});
+	$(document).on('click', '#addItem',function(e) {
+		if ((e.handled !== true) && ($("#newItem").valid())) {
+			e.handled = true;
+			insertItem();
+		}
+	});
 	
 	$("#photoFromGallery").on("click", function(e) {
 		e.preventDefault();
@@ -152,6 +171,12 @@ $(document).on("pagebeforeshow", "#add_competitor", function() {
 		e.preventDefault();
 		$("#photoTypeSelection").popup("close");
 		getPhoto(false);
+	});
+	$( "#newItem" ).validate({
+		messages: {
+			competitor: "Name is required.",
+		},
+		focusInvalid: false
 	});
 });
 
@@ -184,7 +209,7 @@ function addRank() {
 function printList() {
 	$("#list").empty();
 	var result = db.find('rank_list');
-	var resultPhoto = db.find('rank_items', {'position': '1'});
+	var resultPhoto = db.find('rank_items', {'position': 1});
 	var ris = '';
 	var i = 0;
 	var photo = new Array();
@@ -195,7 +220,7 @@ function printList() {
 	i = 0;
 	while (i < result.length) {
 		if (i == 0) {
-			ris += '<ul style="width:95%; margin-left: auto; margin-right: auto;" class="ran" data-inset="true" data-role="listview"><li data-role="list-divider" data-theme="f"><h2>Your Rankings</h2></li>';
+			ris += '<ul style="width:95%; margin-left: auto; margin-right: auto;" class="ran" data-inset="true" data-role="listview"><li data-role="list-divider"  data-theme="f">Your Rankings</li>';
 		}
 		var desc = '';
 		var id = result[i].ID;
@@ -206,7 +231,7 @@ function printList() {
 		if ((photo[id] != null) && (photo[i] != '') && (photo[i] != undefined)) {
 			img = photo[id]
 		}
-		ris += '<li id="'+id+'"><a href="#" onclick="select_link(' + id + ')"><h1>' + result[i].title + '</h1><img src="'+img+'"/><p class="description">' + desc + '</p></a></li>';
+		ris += '<li class="minHeight" id="'+id+'"><a href="#" onclick="select_link(' + id + ')"><img src="'+img+'"/><h3>' + result[i].title + '</h1><p class="description">' + desc + '</p></a></li>';
 		i++;
 	}
 	if (i == 0) {
@@ -297,7 +322,7 @@ function printItems() {
 		} else {
 			photo = '<img src=""/>';
 		}
-		ris += '<li id="' + id + '">' + photo + '<h1><img src="themes/images/icon-' + position + '.png"/>' + result[i].name + '</h1><p>' + note + '</p>' + vote + '</li>';
+		ris += '<li class="minHeight" id="' + id + '">' + photo + '<h1><img src="themes/images/icon-' + position + '.png"/>' + result[i].name + '</h1><p>' + note + '</p>' + vote + '</li>';
 		i++;
 	}
 	if (i == 0) {
@@ -323,7 +348,6 @@ function updateItems() {
 	$("#sortable li").each(function(index) {
 		if (index != 0) {
 			var $current = $(this);
-			console.log("ID: "+$current.attr("id")+ " POS: "+index);
 			db.updateById('rank_items', {
 				'position': index
 			}, $current.attr("id"));
@@ -350,6 +374,7 @@ function order(a, b) {
 
 function openPopUp(id) {
     var i = "#" + id;
+	console.log(i);
     $(i).popup("open");
 }
 
@@ -369,7 +394,7 @@ function getPhoto(fromGallery) {
 }
 
 function photoSuccess(newFilePath) {
-    $("#imageView").show();
+    $("#imageView").show();  
     $("#imageView").attr("src", newFilePath);
 }
 
@@ -380,9 +405,9 @@ function photoError(error) {
 function chooseItem(id, page) {
 	window.localStorage.setItem("manage", id);
 	if (page == 'item'){
-		openPopUp("manageItem")
+		openPopUp("manageItem");
 	}else{
-		openPopUp("manageList")
+		openPopUp("manageList");
 	}
 }
 

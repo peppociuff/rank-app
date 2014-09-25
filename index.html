@@ -14,20 +14,17 @@
 		<script type="text/javascript" src="js/localdb.js"></script>
 		<script type="text/javascript" src="js/jquery-ui.min.js"></script>
 		<script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
-		<script type="text/javascript" src="phonegap.js"></script>
+		<script type="text/javascript" src="cordova.js"></script>
+		<script type="text/javascript" src="js/jquery.validate.min.js"></script>
 	</head>
 	<body>
 		<!-- Page 1-->
 		<div data-role="page" id="home" data-theme="d">
-			<div data-role="header" data-position="inline">
-				<img style="margin-left: auto; margin-right: auto; display: block;" src="themes/images/logo.png"/>
-				<div data-role="navbar">
-					<ul>
-					<li><a href="#" data-theme="b" data-icon="home">Home</a></li>
-					<li><a href="#new" data-theme="c" data-icon="star">New</a></li>
-					</ul>
-				</div>
-		</div>
+			 <div data-role="header">    
+                <a id="about" href="#" data-role="button" data-icon="info">About</a>           
+                <h1>Rankings App</h1>
+                <a href="#new" data-role="button" data-icon="plus">New</a>                     
+             </div>
 			<div id="list" style="padding-top: 70px;" data-role="content" data-theme="a">		 
 			</div>
 			<div data-role="popup" id="manageList" data-dismissible="false">
@@ -37,26 +34,26 @@
 					  <li data-theme="a"><a id="deleteList" href="#">Delete</a></li>
 				</ul>
 			</div> 
+			<div data-role="popup" id="info">
+				<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+				<div style="width: 100%;" data-role="header"><h1 style="text-align:center;">Welcome</h1></div><div data-role="content" data-theme="b"><h3>Instructions to use the app:</h3><ul><li>To modify or delete a ranking and competitor tap hold on it</li><li>To order the competitors in each ranking drag and drop the item</li></ul><h2 style="text-align:right;">Enjoy it!</h2></div>
+			</div>   
 		</div>
 		<!-- End Page 1-->
 		<!-- Page 2-->
 		<div data-role="page" id="new" data-theme="d">
-			<div data-role="header" data-position="inline">
-				<img style="margin-left: auto; margin-right: auto; display: block;" src="themes/images/logo.png"/>
-				<div data-role="navbar">
-					<ul>
-					<li><a href="#home" id="backHome" data-theme="b"   data-icon="home">Home</a></li>
-					<li><a href="#new"  data-theme="c"   data-icon="star">New</a></li>
-					</ul>
-				</div>
+			<div data-role="header">    
+				 <a href="#home" data-role="button" data-icon="home">Home</a>            
+				<h1>Rankings App</h1>
+				<a href="#new" data-role="button" data-icon="plus">New</a>                     
 			</div>
 			<div id="main" data-role="content" data-theme="a">
 				<h2>Create Ranking</h2>
-				<form action="#" method="get">
+				<form id="newForm">
 					<input type="hidden" name="hiddenList" id="hiddenList" value="" />
 					<div data-role="fieldcontain">
 						<label for="title">Title*</label>
-						<input type="text" name="title" id="title" value="" />
+						<input type="text" name="title" id="title" value="" required />
 					</div>
 
 					<div data-role="fieldcontain">
@@ -66,7 +63,7 @@
 					<div class="ui-body ui-body-b">
 						<fieldset class="ui-grid-a">
 						<div class="ui-block-a"><a href="#home" data-role="button" data-theme="b" data-icon="arrow-l">Back</a></div>
-						<div class="ui-block-b"><a href="#" id="save" data-role="button"   data-theme="c" data-icon="check">Save</a></div>
+						<div class="ui-block-b"><a href="#" id="save"  data-role="button"   data-theme="c" data-icon="check">Save</a></div>
 						</fieldset>
 					</div>
 				</form>
@@ -75,14 +72,10 @@
 		<!-- End Page 2 -->
 		<!-- Start of 3 page -->
 		<div data-role="page" id="items" data-theme="d">
-			<div data-role="header" data-position="inline">
-				<img style="margin-left: auto; margin-right: auto; display: block;" src="themes/images/logo.png"/>
-				<div data-role="navbar">
-					<ul>
-					<li><a href="#home"  data-theme="b"   data-icon="home">Home</a></li>
-					<li><a href="#new"  data-theme="c"   data-icon="star">New</a></li>
-					</ul>
-				</div>
+			<div data-role="header">    
+				 <a href="#home" data-role="button" data-icon="home">Home</a>            
+				<h1>Rankings App</h1>
+				<a href="#new" data-role="button" data-icon="plus">New</a>                     
 			</div>
 			<div id="items_main" data-role="content" data-theme="a">		 
 			</div>
@@ -98,23 +91,19 @@
 
 		<!-- Start of 3 page -->
 		<div data-role="page" id="add_competitor" data-theme="d">
-			<div data-role="header" data-position="inline">
-				<img style="margin-left: auto; margin-right: auto; display: block;" src="themes/images/logo.png"/>
-				<div data-role="navbar">
-					<ul>
-					<li><a href="#home"  data-theme="b"   data-icon="home">Home</a></li>
-					<li><a href="#new" data-theme="c"   data-icon="star">New</a></li>
-					</ul>
-				</div>
+			<div data-role="header">    
+				 <a href="#home" data-role="button" data-icon="home">Home</a>            
+				<h1>Rankings App</h1>
+				<a href="#new" data-role="button" data-icon="plus">New</a>                     
 			</div>
 			<div id="main_add" data-role="content" class="ui-content" data-theme="a">
 				<h2>Add Competitor</h2>
-				<form action="#" method="get">
+				<form id="newItem">
 				<input type="hidden" style="" name="hiddenOid" id="hiddenOid" value="" />
 				<h3>Create a new competitor for the ranking</h3>
 					<div class="ui-field-contain">
 						<label for="competitor">Name*</label>
-						<input type="text" name="competitor" id="title_competitor" value="" />
+						<input type="text" name="competitor" id="title_competitor" value="" required />
 					</div>
 					<div class="ui-field-contain">
 						<label for="note">Note</label>
@@ -148,15 +137,15 @@
 						</select>
 					</div>
 					<div style="text-align:center;">
-    					<img id="imageView" style="width: 100%;"></img>
+    					<img id="imageView" style="width: 100%;"/>
     				</div>
 					<div class="ui-field-contain">
-						<a href="#" onclick="openPopUp('photoTypeSelection')" data-role="button" data-theme="b" data-corners="true" data-icon="camera" data-shadow="true">Photo</a>
+						<a href="#" onclick="openPopUp('photoTypeSelection')" data-role="button" data-theme="f" data-corners="true" data-icon="camera" data-shadow="true">Photo</a>
 					</div>
 					<div class="ui-body ui-body-b">
 						<fieldset class="ui-grid-a">
 						<div class="ui-block-a"><a href="#items"  data-role="button" data-theme="b" data-icon="arrow-l">Back</a></div>
-						<div class="ui-block-b"><a href="#" onclick="insertItem()" id="add" data-role="button"   data-theme="c" data-icon="check">Save</a></div>
+						<div class="ui-block-b"><a href="#" id="addItem" data-role="button"   data-theme="c" data-icon="check">Save</a></div>
 						</fieldset>
 					</div>
 				</form>		
