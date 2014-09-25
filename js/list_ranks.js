@@ -101,7 +101,7 @@ $(document).on("pagebeforeshow", "#new", function() {
 		document.body.scrollTop = $(this).offset().top;
 	});
 	$("#title").keypress(function(event) {
-		if (event.which == 13) {
+		if ((event.which == 13) && ($("#newForm").valid())) {
 			event.preventDefault();
 			$("#save").click();
 		}
@@ -149,7 +149,7 @@ $(document).on("pagebeforeshow", "#add_competitor", function() {
 	});
 	
 	$("#title_competitor").keypress(function(event) {
-		if (event.which == 13) {
+		if ((event.which == 13) && ($("#newItem").valid())) {
 			event.preventDefault();
 			insertItem();
 		}
@@ -161,16 +161,20 @@ $(document).on("pagebeforeshow", "#add_competitor", function() {
 		}
 	});
 	
-	$("#photoFromGallery").on("click", function(e) {
-		e.preventDefault();
-		$("#photoTypeSelection").popup("close");
-		getPhoto(true);
+	$(document).on('click', '#photoFromGallery',function(e) {
+		if (e.handled !== true) {
+			e.handled = true;
+			$("#photoTypeSelection").popup("close");
+			getPhoto(true);
+		}
 	});
-
-	$("#photoFromCamera").on("click", function(e) {
-		e.preventDefault();
-		$("#photoTypeSelection").popup("close");
-		getPhoto(false);
+	
+	$(document).on('click', '#photoFromCamera',function(e) {
+		if (e.handled !== true) {
+			e.handled = true;
+			$("#photoTypeSelection").popup("close");
+			getPhoto(false);
+		}
 	});
 	$( "#newItem" ).validate({
 		messages: {
@@ -220,7 +224,7 @@ function printList() {
 	i = 0;
 	while (i < result.length) {
 		if (i == 0) {
-			ris += '<ul style="width:95%; margin-left: auto; margin-right: auto;" class="ran" data-inset="true" data-role="listview"><li data-role="list-divider"  data-theme="f">Your Rankings</li>';
+			ris += '<ul style="width:95%; margin-left: auto; margin-right: auto;" class="ran" data-inset="true"  data-role="listview"><li role="heading" data-role="list-divider"  data-theme="f">Your Rankings</li>';
 		}
 		var desc = '';
 		var id = result[i].ID;
@@ -231,7 +235,7 @@ function printList() {
 		if ((photo[id] != null) && (photo[i] != '') && (photo[i] != undefined)) {
 			img = photo[id]
 		}
-		ris += '<li class="minHeight" id="'+id+'"><a href="#" onclick="select_link(' + id + ')"><img src="'+img+'"/><h3>' + result[i].title + '</h1><p class="description">' + desc + '</p></a></li>';
+		ris += '<li  id="'+id+'"><a href="#" onclick="select_link(' + id + ')"><img src="'+img+'"/><h3>' + result[i].title + '</h1><p class="">' + desc + '</p></a></li>';
 		i++;
 	}
 	if (i == 0) {
@@ -303,7 +307,7 @@ function printItems() {
 
 	while (i < result.length) {
 		if (i == 0) {
-			ris += '<div style="width:80%;"><ul style="clear:both" data-role="listview" data-inset="true" data-theme="d" id="sortable"><li id="divider" data-role="list-divider" role="heading">Official Ranking</li>';
+			ris += '<div style="width:80%;"><ul style="clear:both" data-role="listview" data-inset="true" data-theme="d" id="sortable"><li id="divider" data-theme="f" data-role="list-divider" role="heading">Official Ranking</li>';
 		}
 		var note = '';
 		var vote = '';
@@ -389,11 +393,14 @@ function getPhoto(fromGallery) {
             quality: 30,
             destinationType: Camera.DestinationType.FILE_URI,
             sourceType: source,
-            correctOrientation: true
+            correctOrientation: true,
+			saveToPhotoAlbum: true,
+			encodingType: Camera.EncodingType.JPEG
         });
 }
 
 function photoSuccess(newFilePath) {
+	alert("Evviva");
     $("#imageView").show();  
     $("#imageView").attr("src", newFilePath);
 }
