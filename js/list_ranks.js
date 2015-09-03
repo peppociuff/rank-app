@@ -243,9 +243,9 @@ function printList() {
 		if ((result[i].description != null) && (result[i].description != '') && (result[i].description != undefined)) {
 			desc = result[i].description;
 		}
-		var img = '<img hsrc="themes/images/null2.png"/>';
+		var img = '<img style="width:80px; height:80px;" hsrc="themes/images/null2.png"/>';
 		if ((photo != null) && (photo != '') && (photo != undefined)) {
-			img = '<img style="" src="'+photo+'"/>';
+			img = '<img style="width:80px; height:80px;" style="" src="'+photo+'"/>';
 		}
 		
 		ris += '<li class="minHeight" id="'+id+'"><a href="#" onclick="select_link(' + id + ')">'+img+'<h3>' + result[i].title + '</h3><p>' + desc + '</p></a></li>';
@@ -335,9 +335,9 @@ function printItems() {
 			vote = '<p><h4 style="color:orange;">Vote: <b>' + result[i].vote + '</b></h4></p>';
 		}
 		if ((photo != null) && (photo != '') && (photo != undefined)) {
-			photo = '<img style="" src="' + photo + '"/>';
+			photo = '<img style="width:80px; height:80px;" src="' + photo + '"/>';
 		} else {
-			photo = '<img hsrc="themes/images/null2.png"/>';
+			photo = '<img style="width:80px; height:80px;" src="themes/images/null2.png"/>';
 		}
 		ris += '<li class="minHeight" id="' + id + '"><a href="#">' + photo + '<h3><img src="themes/images/icon-' + (i+1) + '.png"/>&nbsp;'+ result[i].name + '</h3><p>' + note + '</p>' + vote + '</li>';
 		i++;
