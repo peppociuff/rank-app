@@ -45,7 +45,6 @@ $(document).on("pagebeforeshow", "#home", function() {
 	}); 	
 	$(document).on('click', '#about',function(e) {
 		if (e.handled !== true) {
-		console.log("about");
 			e.handled = true;
 			openPopUp("info");
 		}
@@ -230,7 +229,7 @@ function printList() {
 	i = 0;*/
 	while (i < result.length) {
 		if (i == 0) {
-			ris += '<ul style="width:100%; margin-left: auto; margin-right: auto;" class="ran" data-inset="true"  data-role="listview"><li role="heading" data-role="list-divider"  data-theme="f">Your Rankings</li>';
+			ris += '<ul style="margin-left: auto; margin-right: auto;" class="ran" data-inset="true"  data-role="listview"><li role="heading" data-role="list-divider"  data-theme="f">Your Rankings</li>';
 		}
 		var resultPhoto = db.find('rank_items', {'rank_oid': result[i].ID});
 		resultPhoto.sort(order);
@@ -243,9 +242,9 @@ function printList() {
 		if ((result[i].description != null) && (result[i].description != '') && (result[i].description != undefined)) {
 			desc = result[i].description;
 		}
-		var img = '<img style="width:80px; height:80px;" hsrc="themes/images/null2.png"/>';
+		var img = '<img style="width:80px; height:80px;" src="themes/images/null2.png"/>';
 		if ((photo != null) && (photo != '') && (photo != undefined)) {
-			img = '<img style="width:80px; height:80px;" style="" src="'+photo+'"/>';
+			img = '<img style="width:80px; height:80px;" src="'+photo+'"/>';
 		}
 		
 		ris += '<li class="minHeight" id="'+id+'"><a href="#" onclick="select_link(' + id + ')">'+img+'<h3>' + result[i].title + '</h3><p>' + desc + '</p></a></li>';
@@ -270,7 +269,6 @@ function insertItem() {
 	var photo = $('#imageView').attr("src");
 	var rank_oid = window.localStorage.getItem("key");
 	var position = 1;
-	console.log("my vote: " +vote);
 	if (oid != ""){
 		db.updateById('rank_items', {
 			'name': name,
@@ -320,7 +318,7 @@ function printItems() {
 
 	while (i < result.length) {
 		if (i == 0) {
-			ris += '<div style="width:100%;"><ul style="clear:both" data-role="listview" data-inset="true" data-icon="false" id="sortable"><li id="divider" data-theme="f" data-role="list-divider" role="heading">Official Ranking</li>';
+			ris += '<div><ul style="clear:both" data-role="listview" data-inset="true" data-icon="false" id="sortable"><li id="divider" data-theme="f" data-role="list-divider" role="heading">Official Ranking</li>';
 		}
 		var note = '';
 		var vote = '';
@@ -337,7 +335,7 @@ function printItems() {
 		if ((photo != null) && (photo != '') && (photo != undefined)) {
 			photo = '<img style="width:80px; height:80px;" src="' + photo + '"/>';
 		} else {
-			photo = '<img style="width:80px; height:80px;" src="themes/images/null2.png"/>';
+			photo = '<img style="width:80px; height:80px;" src="themes/images/logo.png"/>';
 		}
 		ris += '<li class="minHeight" id="' + id + '"><a href="#">' + photo + '<h3><img src="themes/images/icon-' + (i+1) + '.png"/>&nbsp;'+ result[i].name + '</h3><p>' + note + '</p>' + vote + '</li>';
 		i++;
@@ -386,7 +384,6 @@ function order(a, b) {
         return 1;
     }
     return 0;*/
-	console.log(a.vote);
 	 if (a.vote < b.vote) {
         return 1;
     }
