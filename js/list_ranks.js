@@ -92,6 +92,7 @@ $(document).on("pagebeforeshow", "#new", function() {
 		 $('#hiddenList').val(id);
 	}else{
 		$('form').find("input[type=text], textarea, hidden").val("");
+		$('#hiddenList').val("");
 	}
 	window.localStorage.removeItem("key");
 	$('#title').on('focus', function() {
@@ -140,6 +141,7 @@ $(document).on("pagebeforeshow", "#add_competitor", function() {
 		$('form').find("input[type=text], textarea, hidden").val("");
 		$('#vote').val("").selectmenu('refresh');
 		$("#imageView").attr("src", "");
+		$('#hiddenOid').val("");
 	}
 	
 	$('#title_competitor').on('focus', function() {
@@ -217,27 +219,33 @@ function addRank() {
 function printList() {
 	$("#list").empty();
 	var result = db.find('rank_list');
-	var resultPhoto = db.find('rank_items', {'position': 1});
+	//var resultPhoto = db.find('rank_items', {'position': 1});
 	var ris = '';
 	var i = 0;
-	var photo = new Array();
-	while (i < resultPhoto.length) {
-		photo[resultPhoto[i].rank_oid] = resultPhoto[i].image;
+	//var photo = new Array();
+	/*while (i < resultPhoto.length) {
+		photo[resultPhoto[0].rank_oid] = resultPhoto[0].image;
 	i++
-	}
-	i = 0;
+	} 
+	i = 0;*/
 	while (i < result.length) {
 		if (i == 0) {
-			ris += '<ul style="width:95%; margin-left: auto; margin-right: auto;" class="ran" data-inset="true"  data-role="listview"><li role="heading" data-role="list-divider"  data-theme="f">Your Rankings</li>';
+			ris += '<ul style="width:100%; margin-left: auto; margin-right: auto;" class="ran" data-inset="true"  data-role="listview"><li role="heading" data-role="list-divider"  data-theme="f">Your Rankings</li>';
+		}
+		var resultPhoto = db.find('rank_items', {'rank_oid': result[i].ID});
+		resultPhoto.sort(order);
+		var photo = null;
+		if (resultPhoto.length != 0) {
+			photo = resultPhoto[0].image;
 		}
 		var desc = "";
 		var id = result[i].ID;
 		if ((result[i].description != null) && (result[i].description != '') && (result[i].description != undefined)) {
 			desc = result[i].description;
 		}
-		var img = '<img src=""/>';
-		if ((photo[id] != null) && (photo[id] != '') && (photo[id] != undefined)) {
-			img = '<img style="" src="'+photo[id]+'"/>';
+		var img = '<img hsrc="themes/images/null2.png"/>';
+		if ((photo != null) && (photo != '') && (photo != undefined)) {
+			img = '<img style="" src="'+photo+'"/>';
 		}
 		
 		ris += '<li class="minHeight" id="'+id+'"><a href="#" onclick="select_link(' + id + ')">'+img+'<h3>' + result[i].title + '</h3><p>' + desc + '</p></a></li>';
@@ -262,11 +270,11 @@ function insertItem() {
 	var photo = $('#imageView').attr("src");
 	var rank_oid = window.localStorage.getItem("key");
 	var position = 1;
-	
+	console.log("my vote: " +vote);
 	if (oid != ""){
 		db.updateById('rank_items', {
 			'name': name,
-			'vote':vote,
+			'vote': parseInt(vote),
 			'note':note,
 			'image':photo,
 		}, oid);
@@ -276,15 +284,15 @@ function insertItem() {
 			'rank_oid': rank_oid
 		});
 
-		if (result != '') {
+		/*if (result != '') {
 			result.sort(order);
 			position = 1 + Number(result[result.length - 1].position);
-		}
+		}*/
 		var id = db.insert('rank_items', {
 			'name': name,
 			'note': note,
-			'position': position,
-			'vote': vote,
+			//'position': position,
+			'vote': parseInt(vote),
 			'image': photo,
 			'rank_oid': rank_oid
 		});
@@ -312,7 +320,7 @@ function printItems() {
 
 	while (i < result.length) {
 		if (i == 0) {
-			ris += '<div style="width:80%;"><ul style="clear:both" data-role="listview" data-inset="true"  id="sortable"><li id="divider" data-theme="f" data-role="list-divider" role="heading">Official Ranking</li>';
+			ris += '<div style="width:100%;"><ul style="clear:both" data-role="listview" data-inset="true" data-icon="false" id="sortable"><li id="divider" data-theme="f" data-role="list-divider" role="heading">Official Ranking</li>';
 		}
 		var note = '';
 		var vote = '';
@@ -329,9 +337,9 @@ function printItems() {
 		if ((photo != null) && (photo != '') && (photo != undefined)) {
 			photo = '<img style="" src="' + photo + '"/>';
 		} else {
-			photo = '<img src="themes/images/null.png"/>';
+			photo = '<img hsrc="themes/images/null2.png"/>';
 		}
-		ris += '<li class="minHeight" id="' + id + '"><a href="#">' + photo + '<h3><img src="themes/images/icon-' + position + '.png"/>&nbsp;'+ result[i].name + '</h3><p>' + note + '</p>' + vote + '</li>';
+		ris += '<li class="minHeight" id="' + id + '"><a href="#">' + photo + '<h3><img src="themes/images/icon-' + (i+1) + '.png"/>&nbsp;'+ result[i].name + '</h3><p>' + note + '</p>' + vote + '</li>';
 		i++;
 	}
 	if (i == 0) {
@@ -341,20 +349,20 @@ function printItems() {
 	}
 
 	$('#items_main').html(ris);
-	$('#sortable').listview().listview("refresh");
+	//$('#sortable').listview().listview("refresh");
 	$('#items_main').trigger('create');
-	$("#sortable").sortable({items: '> li:not(#divider)'});
-	$("#sortable").disableSelection();
+	///$("#sortable").sortable({items: '> li:not(#divider)'});
+	//$("#sortable").disableSelection();
 
-	$("#sortable").bind("sortstop", function(event, ui) {
+	/*$("#sortable").bind("sortstop", function(event, ui) {
 		event.preventDefault();
 		updateItems();
-	});
+	});*/
 return;
 }
 
 function updateItems() {
-	$("#sortable li").each(function(index) {
+	/*$("#sortable li").each(function(index) {
 		if (index != 0) {
 			var $current = $(this);
 			db.updateById('rank_items', {
@@ -362,7 +370,7 @@ function updateItems() {
 			}, $current.attr("id"));
 		}
 
-	});
+	});*/
 	printItems();
 }
 function select_link(id) {
@@ -371,19 +379,31 @@ function select_link(id) {
 };
 
 function order(a, b) {
-    if (a.position < b.position) {
+    /*if (a.position < b.position) {
         return -1;
     }
     if (a.position > b.position) {
         return 1;
     }
-    return 0;
-
+    return 0;*/
+	console.log(a.vote);
+	 if (a.vote < b.vote) {
+        return 1;
+    }
+    if (a.vote > b.vote) {
+        return -1;
+    }
+	if (a.vote == b.vote) {
+        if (a.name > b.name) {
+			return 1;
+		}else{
+			return -1;
+		}
+    }
 }
 
 function openPopUp(id) {
     var i = "#" + id;
-	console.log(i);
     $(i).popup("open");
 }
 
