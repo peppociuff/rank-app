@@ -335,7 +335,7 @@ function printItems() {
 		if ((photo != null) && (photo != '') && (photo != undefined)) {
 			photo = '<img style="width:80px; height:80px;" src="' + photo + '"/>';
 		} else {
-			photo = '<img style="width:80px; height:80px;" src="themes/images/logo.png"/>';
+			photo = '<img style="width:80px; height:80px;" src="themes/images/null2.png"/>';
 		}
 		ris += '<li class="minHeight" id="' + id + '"><a href="#">' + photo + '<h3><img src="themes/images/icon-' + (i+1) + '.png"/>&nbsp;'+ result[i].name + '</h3><p>' + note + '</p>' + vote + '</li>';
 		i++;
