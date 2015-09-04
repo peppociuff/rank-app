@@ -100,14 +100,14 @@ $(document).on("pagebeforeshow", "#new", function() {
 	$('#desc').on('focus', function() {
 		document.body.scrollTop = $(this).offset().top;
 	});
-	$(document).on('keypress', '#title', function(e) {
+	/*$(document).on('keypress', '#title', function(e) {
 		if (e.which == 13){
 			if ((e.handled !== true) && ($("#newForm").valid()) && (e.which == 13)) {
 				e.handled = true;
 				$("#save").click();
 			}
 		}
-	});
+	});*/
 	$(document).on('click', '#save',function(e) {
 		if ((e.handled !== true) && ($("#newForm").valid())) {
 			e.handled = true;
@@ -151,14 +151,14 @@ $(document).on("pagebeforeshow", "#add_competitor", function() {
 		document.body.scrollTop = $(this).offset().top;
 	});
 	
-	$(document).on('keypress', '#title_competitor', function(e) {
+	/*$(document).on('keypress', '#title_competitor', function(e) {
 		if (e.which == 13){
 			if ((e.handled !== true) && ($("#newItem").valid()) && (e.which == 13)) {
 				e.handled = true;
 				insertItem();
 			}
 		}
-	});
+	});*/
 	$(document).on('click', '#addItem',function(e) {
 		if ((e.handled !== true) && ($("#newItem").valid())) {
 			e.handled = true;
@@ -272,7 +272,7 @@ function insertItem() {
 	if (oid != ""){
 		db.updateById('rank_items', {
 			'name': name,
-			'vote': parseInt(vote),
+			'vote': vote,
 			'note':note,
 			'image':photo,
 		}, oid);
@@ -290,7 +290,7 @@ function insertItem() {
 			'name': name,
 			'note': note,
 			//'position': position,
-			'vote': parseInt(vote),
+			'vote': vote,
 			'image': photo,
 			'rank_oid': rank_oid
 		});
@@ -384,13 +384,15 @@ function order(a, b) {
         return 1;
     }
     return 0;*/
-	 if (a.vote < b.vote) {
+	var tmpA = parseFloat (a.vote);
+	var tmpB = parseFloat (b.vote);
+	 if (tmpA < tmpB) {
         return 1;
     }
-    if (a.vote > b.vote) {
+    if (tmpA > tmpB) {
         return -1;
     }
-	if (a.vote == b.vote) {
+	if (tmpA == tmpB) {
         if (a.name > b.name) {
 			return 1;
 		}else{
