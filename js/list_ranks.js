@@ -100,6 +100,11 @@ $(document).on("pagebeforeshow", "#new", function() {
 	$('#desc').on('focus', function() {
 		document.body.scrollTop = $(this).offset().top;
 	});
+	$(document).on('keypress', '#title', function(e) {
+		if (e.which == 13){
+			return false;
+		}
+	});
 
 	$(document).on('click', '#save',function(e) {
 		if ((e.handled !== true) && ($("#newForm").valid())) {
@@ -138,6 +143,11 @@ $(document).on("pagebeforeshow", "#add_competitor", function() {
 	
 	$('#title_competitor').on('focus', function() {
 		document.body.scrollTop = $(this).offset().top;
+	});
+	$(document).on('keypress', '#title_competitor', function(e) {
+		if (e.which == 13){
+			return false;	
+		}
 	});
 	
 	$('#note').on('focus', function() {
