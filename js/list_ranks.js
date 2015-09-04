@@ -100,14 +100,7 @@ $(document).on("pagebeforeshow", "#new", function() {
 	$('#desc').on('focus', function() {
 		document.body.scrollTop = $(this).offset().top;
 	});
-	/*$(document).on('keypress', '#title', function(e) {
-		if (e.which == 13){
-			if ((e.handled !== true) && ($("#newForm").valid()) && (e.which == 13)) {
-				e.handled = true;
-				$("#save").click();
-			}
-		}
-	});*/
+
 	$(document).on('click', '#save',function(e) {
 		if ((e.handled !== true) && ($("#newForm").valid())) {
 			e.handled = true;
@@ -151,14 +144,6 @@ $(document).on("pagebeforeshow", "#add_competitor", function() {
 		document.body.scrollTop = $(this).offset().top;
 	});
 	
-	/*$(document).on('keypress', '#title_competitor', function(e) {
-		if (e.which == 13){
-			if ((e.handled !== true) && ($("#newItem").valid()) && (e.which == 13)) {
-				e.handled = true;
-				insertItem();
-			}
-		}
-	});*/
 	$(document).on('click', '#addItem',function(e) {
 		if ((e.handled !== true) && ($("#newItem").valid())) {
 			e.handled = true;
@@ -218,15 +203,8 @@ function addRank() {
 function printList() {
 	$("#list").empty();
 	var result = db.find('rank_list');
-	//var resultPhoto = db.find('rank_items', {'position': 1});
 	var ris = '';
 	var i = 0;
-	//var photo = new Array();
-	/*while (i < resultPhoto.length) {
-		photo[resultPhoto[0].rank_oid] = resultPhoto[0].image;
-	i++
-	} 
-	i = 0;*/
 	while (i < result.length) {
 		if (i == 0) {
 			ris += '<ul style="margin-left: auto; margin-right: auto;" class="ran" data-inset="true"  data-role="listview"><li role="heading" data-role="list-divider"  data-theme="f">Your Rankings</li>';
